@@ -20,3 +20,10 @@ CREATE TABLE IF NOT EXISTS lendings (
   borrow_date DATE NOT NULL,
   return_date DATE
 );
+
+
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
