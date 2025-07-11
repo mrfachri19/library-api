@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/mrfachri19/digital-library-backend/internal/config"
 	"github.com/mrfachri19/digital-library-backend/internal/handler"
 	"github.com/mrfachri19/digital-library-backend/internal/middleware"
@@ -20,6 +21,10 @@ func main() {
 
 	app := fiber.New()
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:3000", // frontend URL
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
 	// ========= Init Layer =========
 	// Book
 	bookRepo := repository.NewBookRepository()

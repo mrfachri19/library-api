@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"context"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/mrfachri19/digital-library-backend/internal/usecase"
 )
@@ -16,13 +14,24 @@ func NewAnalyticsHandler(u usecase.AnalyticsUsecase) *AnalyticsHandler {
 }
 
 func (h *AnalyticsHandler) GetSummary(c *fiber.Ctx) error {
-	total, _ := h.Usecase.GetTotalLendings(context.Background())
-	top, _ := h.Usecase.GetTopBooks(context.Background(), 5)
-	users, _ := h.Usecase.GetUniqueBorrowers(context.Background())
+	mostBorrowed, err := h.Usecase.GetMostBorrowedBooks()
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	monthly, err := h.Usecase.GetMonthlyLendingTrends()
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	category, err := h.Usecase.GetBooksByCategory()
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
 
 	return c.JSON(fiber.Map{
-		"total_lendings":   total,
-		"top_books":        top,
-		"unique_borrowers": users,
+		"most_borrowed":         mostBorrowed,
+		"monthly_lending":       monthly,
+		"category_distribution": category,
 	})
 }
