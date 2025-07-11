@@ -27,6 +27,12 @@ func main() {
 	lendingUC := usecase.NewLendingUsecase(lendingRepo)
 	lendingHandler := handler.NewLendingHandler(lendingUC)
 
+	analyticsRepo := repository.NewAnalyticsRepository()
+	analyticsUC := usecase.NewAnalyticsUsecase(analyticsRepo)
+	analyticsHandler := handler.NewAnalyticsHandler(analyticsUC)
+
+	app.Get("/analytics/summary", analyticsHandler.GetSummary)
+
 	// Lending routes
 	app.Get("/lendings", lendingHandler.GetAll)
 	app.Post("/lendings", lendingHandler.Create)
